@@ -4,38 +4,47 @@
 %bcond_with	tests	# unit tests (missing in sdist)
 
 Summary:	Useful decorators and context managers
+Summary(pl.UTF-8):	Przydatne dekoratory i zarządcy kontekstu
 Name:		python3-jaraco.context
 Version:	6.0.1
 Release:	1
 License:	MIT
 Group:		Libraries/Python
-#Source0Download: https://pypi.org/simple/jaraco.context/
+#Source0Download: https://pypi.org/simple/jaraco-context/
 Source0:	https://files.pythonhosted.org/packages/source/j/jaraco.context/jaraco_context-%{version}.tar.gz
 # Source0-md5:	bb22ef027077b1fa8528ef1d9840b838
 URL:		https://pypi.org/project/jaraco.context/
-BuildRequires:	python3-modules >= 1:3.7
-BuildRequires:	python3-setuptools >= 1:56
+BuildRequires:	python3-modules >= 1:3.8
+BuildRequires:	python3-setuptools >= 1:61.2
 BuildRequires:	python3-setuptools_scm >= 3.4.1
 BuildRequires:	python3-toml
 %if %{with tests}
+%if "%{_ver_lt %{py3_ver} 3.12}" == "1"
+BuildRequires:	python3-backports.tarfile
+%endif
+BuildRequires:	python3-portend
 BuildRequires:	python3-pytest >= 6
 %endif
 BuildRequires:	rpm-pythonprov
 BuildRequires:	rpmbuild(macros) >= 1.714
 %if %{with doc}
 BuildRequires:	python3-furo
-BuildRequires:	python3-jaraco.packaging >= 9
+BuildRequires:	python3-jaraco.packaging >= 9.3
+BuildRequires:	python3-jaraco.tidelift >= 1.4
 BuildRequires:	python3-rst.linker >= 1.9
 BuildRequires:	sphinx-pdg-3 >= 3.5
 #BuildRequires:	sphinx-lint
 %endif
 Requires:	python3-jaraco
-Requires:	python3-modules >= 1:3.7
+Requires:	python3-modules >= 1:3.8
 BuildArch:	noarch
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
 %description
 Useful decorators and context managers.
+
+%description -l pl.UTF-8
+Przydatne dekoratory i zarządcy kontekstu.
 
 %package apidocs
 Summary:	API documentation for Python jaraco.context module
@@ -62,7 +71,6 @@ EOF
 
 %if %{with tests}
 PYTEST_DISABLE_PLUGIN_AUTOLOAD=1 \
-PYTEST_PLUGINS=... \
 %{__python3} -m pytest tests
 %endif
 
